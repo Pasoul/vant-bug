@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/vant@2.12/lib/index.css" />
+    <script src="https://unpkg.com/vue@2.6/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vant@2.12/lib/vant.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      Vue.use(vant);
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            minDate: new Date(2023, 4, 17),
+            value: '',
+            accStaPop: true,
+          };
+        },
+        methods: {
+          padZero(val) {
+            if (Number(val) < 10) {
+              return '0' + val;
+            }
+            return val;
+          },
+          formatAllTime(date) {
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hour = date.getHours();
+            const minute = date.getMinutes();
+            return {
+              year: date.getFullYear(),
+              padZeroMonth: this.padZero(month),
+              padZeroDay: this.padZero(day),
+              padZeroHour: this.padZero(hour),
+              padZeroMinute: this.padZero(minute),
+            };
+          },
+          confAccessStart: function (date) {
+            const { year, padZeroMonth, padZeroDay } = this.formatAllTime(date);
+            this.$toast(`${year}年${padZeroMonth}月${padZeroDay}日`);
+          },
+        },
+        template: `
+  <van-popup v-model="accStaPop" position="bottom">
+      <van-datetime-picker
+        v-model="value"
+        title="选择时间"
+        type="date"
+        :min-date="minDate"
+        @confirm="confAccessStart"
+      ></van-datetime-picker>
+    </van-popup>
+   
+  `,
+      });
+    </script>
+  </body>
+</html>
